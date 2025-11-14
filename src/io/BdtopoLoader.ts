@@ -33,11 +33,16 @@ export class BdtopoLoader {
             const allowedDirection = feature.properties.sens_de_circulation;
             if (allowedDirection == "Double sens" || allowedDirection == "Sens direct") {
                 const directEdge = new Edge(startVertex,endVertex);
+                directEdge.setGeometry(geometry);
                 directEdge.id = feature.properties.cleabs_ge + '-direct';
                 g.edges.push(directEdge);
             }
             if (allowedDirection == "Double sens" || allowedDirection == "Sens inverse") {
                 const reverseEdge = new Edge(endVertex, startVertex);
+                const reverseCoordinates = [...geometry.coordinates]
+                reverseCoordinates.reverse();
+                const reverseGeometry = {"type": "LineString", coordinates: reverseCoordinates}
+                reverseEdge.setGeometry(reverseGeometry as LineString)
                 reverseEdge.id = feature.properties.cleabs_ge + '-reverse';
                 g.edges.push(reverseEdge);
             }

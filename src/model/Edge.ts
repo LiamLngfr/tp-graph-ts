@@ -1,4 +1,4 @@
-import { LineString } from "geojson";
+import { Geometry, LineString } from "geojson";
 import { Vertex } from "./Vertex";
 import length from "@turf/length";
 import { lineString } from "@turf/turf";
@@ -10,6 +10,7 @@ export class Edge {
     id: string;
     private _source: Vertex;
     private _target: Vertex;
+    private _geometry : LineString;
 
     constructor(source: Vertex, target:Vertex){
         this._source = source;
@@ -21,7 +22,7 @@ export class Edge {
     }
 
     getGeometry(): LineString {
-        return {
+        return this._geometry ? this._geometry : {
             type: "LineString",
             coordinates: [
                 this._source.coordinate,
@@ -36,6 +37,10 @@ export class Edge {
 
     getTarget() : Vertex{
         return this._target;
+    }
+
+    setGeometry(geometry: LineString){
+        this._geometry = geometry;  
     }
 
 }
